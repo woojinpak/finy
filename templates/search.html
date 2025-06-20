@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>검색 결과</title>
+  <style>
+    body {
+      background: #f7f7f7;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .search-bar-wrap {
+      width: 100%;
+      background: #e9ecef;
+      padding: 32px 0 24px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .search-box {
+      display: flex;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      padding: 8px 16px;
+      align-items: center;
+      min-width: 350px;
+      max-width: 90vw;
+    }
+    #keyword {
+      border: none;
+      outline: none;
+      font-size: 1.2rem;
+      padding: 12px 10px;
+      width: 260px;
+      background: transparent;
+    }
+    button {
+      padding: 10px 22px;
+      font-size: 1.1rem;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #274690;
+    }
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 32px;
+    }
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 24px;
+      color: #22223b;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr); /* 다섯 줄로 */
+      gap: 28px;
+      justify-content: center;
+      background: #e9ecef;
+      padding: 32px 32px 48px 32px;
+      border-radius: 18px;
+      min-width: 1150px; /* 5개 박스+gap에 맞게 넓힘 */
+      max-width: 1400px;
+      box-sizing: border-box;
+    }
+    .product-box {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 16px;
+      width: 200px;
+      text-align: center;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .product-box img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      background: #f1f1f1;
+    }
+    .product-box a {
+      color: #274690;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.08rem;
+    }
+    .product-box a:hover {
+      text-decoration: underline;
+    }
+    .product-box div {
+      margin-top: 4px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="search-bar-wrap">
+    <form class="search-box" onsubmit="runCrawl(); return false;">
+      <input type="text" id="keyword" placeholder="검색어 입력" value="{{ keyword }}">
+      <button type="submit">검색</button>
+    </form>
+  </div>
+  <div class="main-content">
+    <div class="title">"{{ keyword }}" 검색 결과</div>
+    <div class="product-list">
+      {% for item in items %}
+        <div class="product-box">
+          <img src="{{ item['Img'] }}" alt="상품 이미지">
+          <a href="{{ item['Url'] }}" target="_blank">{{ item['Name'] }}</a>
+          <div>가격: {{ item['Price'] }}</div>
+          <div>플랫폼: {{ item['Platform'] }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    function runCrawl() {
+      const keyword = document.getElementById('keyword').value;
+      fetch(`/run_crawl?name=${encodeURIComponent(keyword)}`)
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = `/search?name=${encodeURIComponent(keyword)}`;
+        });
+    }
+  </script>
+</body>
+</html>

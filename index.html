@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>상품 검색</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f7f7f7;
+    }
+
+    .container {
+      text-align: center;
+      margin-bottom: 100px;
+    }
+
+    .logo {
+      font-size: 200px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .notice {
+      color: #888;
+      text-align: right;
+    }
+
+    #keyword {
+      padding: 10px;
+      font-size: 1rem;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #000; 
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333; 
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">Finy</div>
+    <div class="search-box">
+      <input type="text" id="keyword" placeholder="검색어 입력">
+      <button onclick="runCrawl()">검색</button>
+    </div>
+    <div class="notice">검색어는 최대한 자세하게 입력해주세요</div>
+  </div>
+
+  <script>
+    function runCrawl() {
+      const keyword = document.getElementById('keyword').value;
+      fetch(`/run_crawl?name=${encodeURIComponent(keyword)}`)
+        .then(response => response.json())
+        .then(data => {
+          window.location.href = `/search?name=${encodeURIComponent(keyword)}`;
+        });
+    }
+  </script>
+</body>
+</html>
